@@ -1,0 +1,25 @@
+choose-locations-modal {
+	legend {
+		font-size: 2.4rem;
+		font-weight: 600;
+		text-align: center;
+	}
+
+	.options {
+		display: grid;
+		padding: 0.8rem 0;
+
+		& label {
+			font-size: 2.4rem;
+			padding: 0 0.8rem;
+			display: flex;
+			align-items: center;
+			column-gap: 0.8rem;
+			border-radius: 0.8rem;
+			cursor: pointer;
+			&:hover {
+				background: var(--yellow500);
+			}
+		}
+	}
+}

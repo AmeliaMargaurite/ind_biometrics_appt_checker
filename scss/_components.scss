@@ -1,0 +1,29 @@
+.btn {
+	padding: 0.8rem 1.6rem;
+	background: var(--yellow500);
+	border: 1px solid var(--blue500);
+	border-radius: 0.4rem;
+}
+
+.buttons__wrapper {
+	display: flex;
+	justify-content: space-between;
+}
+
+modal-component {
+	position: fixed;
+	display: grid;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.733);
+
+	.wrapper {
+		position: absolute;
+		display: grid;
+		grid-template-rows: auto max-content;
+		inset: 3.2rem;
+		background: white;
+		border: 1px solid black;
+		border-radius: 0.8rem;
+		padding: 2.4rem;
+	}
+}

@@ -1,0 +1,16 @@
+.results {
+	display: grid;
+	justify-content: center;
+	align-items: center;
+	row-gap: 2.4rem;
+
+	results-component {
+		display: grid;
+		row-gap: 0.8rem;
+		text-align: center;
+	}
+
+	.result {
+		font-size: 2.4rem;
+	}
+}

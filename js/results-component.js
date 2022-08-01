@@ -1,74 +1,66 @@
+import { getSavedLocations, getSavedPersons } from "./helpers.js";
 import { listLocations } from "./locations.js";
 
-class ResultsComponent extends HTMLElement {
+export class ResultsComponent extends HTMLElement {
 	constructor() {
 		super();
 	}
 
-	persons = window.localStorage.getItem("persons")
-		? Number(JSON.parse(window.localStorage.getItem("persons")))
-		: 1;
+	savedPersons = getSavedPersons();
+	savedLocations = getSavedLocations();
 
-	locations = window.localStorage.getItem("locations")
-		? JSON.parse(window.localStorage.getItem("locations"))
-		: listLocations;
 	// check local storage for saved preferences
 	setPersons(num) {
 		if (typeof num === "number") {
-			this.Persons = num;
+			this.savedPersons = num;
 			window.localStorage.setItem("persons", JSON.stringify(num));
 		}
 	}
 
 	getPersons = () => {
-		return this.Persons;
+		return this.savedPersons;
 	};
 
 	setLocations = (array) => {
-		this.locations = array;
+		this.savedLocations = array;
 		window.localStorage.setItem("locations", JSON.stringify(array));
 	};
 
 	getLocations = () => {
-		return this.locations;
+		return this.savedLocations;
 	};
 
 	getAllAvailableAppointments = async () => {
-		const persons = this.Persons;
-		const locations = this.locations;
+		const persons = this.savedPersons;
+		const locations = this.savedLocations;
 
-		const buildURL = (locationKey, persons) => {
-			return `https://oap.ind.nl/oap/api/desks/${locationKey}/slots/?productKey=BIO&persons=${persons}`;
+		const buildURL = (locationName, persons) => {
+			return `https://ind-appointment-checker.herokuapp.com/${locationName}/${persons}`;
 		};
 
 		const fetchData = async (url) => {
-			let body = "{";
 			const response = await fetch(url, {
 				method: "GET",
-				// headers: {
-				// 	"Content-Type": "application/json",
-				// },
 			}).then((resp) => resp.text());
-			// response is malformed, need to remake
-			const parts = response.split(')]}\',\n{"status":"OK",');
-			return JSON.parse((body += parts[1])).data;
+			return JSON.parse(response);
 		};
 
 		const requestAllSortedData = async () => {
 			const allAppointments = [];
 
-			for (let location of locations) {
-				const url = buildURL(location.key, this.persons);
-				const locationName = location.key.split("_").join(" ");
-				const appointments = await fetchData(url);
-				appointments.forEach((appointment) => {
-					allData.push({
-						location: locationName,
-						date: new Date(appointment.date),
-						startTime: appointment.startTime,
+			if (locations)
+				for (let location of locations) {
+					const url = buildURL(location.name, this.savedPersons);
+					const locationName = location.name.split("_").join(" ");
+					const appointments = await fetchData(url);
+					appointments.forEach((appointment) => {
+						allAppointments.push({
+							location: locationName,
+							date: new Date(appointment.date).toDateString(),
+							startTime: appointment.startTime,
+						});
 					});
-				});
-			}
+				}
 
 			return allAppointments.sort((a, b) => Number(a.date) - Number(b.date));
 		};
@@ -77,10 +69,49 @@ class ResultsComponent extends HTMLElement {
 	};
 
 	async connectedCallback() {
-		console.log(this.persons);
-		const allAppointments = await this.getAllAvailableAppointments();
-		console.log(allAppointments);
+		if (this.savedLocations.length < 1) {
+			this.innerHTML = `No locations have been chosen yet. Please choose at least one location to continue`;
+			return;
+		}
+
+		// const allAppointments = await this.getAllAvailableAppointments();
+		const tempData = [
+			{
+				date: new Date().toDateString(),
+				startTime: "09:00",
+				location: "IND Amsterdam",
+			},
+			{
+				date: new Date().toDateString(),
+				startTime: "10:00",
+				location: "IND Zwolle",
+			},
+		];
+		const firstAppointment = tempData[0];
+		let chosenLocations = "";
+
+		for (const key in this.savedLocations) {
+			const location = this.savedLocations[key];
+			const name = location.split("_").join(" ");
+
+			if (this.savedLocations.length === listLocations.length) {
+				chosenLocations = "any location";
+				continue;
+			} else if (this.savedLocations.length === 1) {
+				chosenLocations += name;
+			} else if (key != this.savedLocations.length - 1) {
+				chosenLocations += name + ", ";
+			} else {
+				chosenLocations += "and " + name;
+			}
+		}
+		this.innerHTML = `
+    <p>The next available appointment at <strong> ${chosenLocations} </strong> for <strong>${
+			this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
+		}</strong> is:</p>
+    <span class="result">${firstAppointment.date}, ${
+			firstAppointment.startTime
+		} at ${firstAppointment.location} </span>
+    `;
 	}
 }
-
-customElements.define("results-component", ResultsComponent);
