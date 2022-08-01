@@ -49,7 +49,11 @@ const requestAllSortedData = async () => {
 		const location = key.split("_").join(" ");
 		const respData = await fetchData(url);
 		respData.forEach((data) => {
-			allData.push({ location: key, date: new Date(data.date) });
+			allData.push({
+				location: key,
+				date: new Date(data.date),
+				startTime: data.startTime,
+			});
 		});
 	}
 
@@ -57,4 +61,4 @@ const requestAllSortedData = async () => {
 	return [allData[0], allData[1], allData[2]];
 };
 
-const data = await requestAllSortedData();
+// const data = await requestAllSortedData();
