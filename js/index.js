@@ -58,6 +58,3 @@ const requestAllSortedData = async () => {
 };
 
 const data = await requestAllSortedData();
-
-
-OXA03 D2PR 05
