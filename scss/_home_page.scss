@@ -1,0 +1,23 @@
+.appointments {
+	display: grid;
+	row-gap: 3.2rem;
+
+	& .cards__wrapper {
+		display: grid;
+		row-gap: 1.6rem;
+	}
+
+	& .card {
+		display: grid;
+		justify-items: center;
+		padding: 1.6rem 0;
+		border-radius: 0.8rem;
+		row-gap: 0.4rem;
+		color: var(--blue500);
+		cursor: pointer;
+
+		&:hover {
+			background: var(--yellow500);
+		}
+	}
+}

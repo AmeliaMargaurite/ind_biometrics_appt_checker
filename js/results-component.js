@@ -10,15 +10,38 @@ export class ResultsComponent extends HTMLElement {
 		super();
 	}
 
-	savedPersons = getSavedPersonsFromLocalStorage();
-	savedLocations = getSavedLocationsFromLocalStorage();
+	api = null;
+	setApi(api) {
+		this.api = api;
+	}
+
+	availableLocations = [];
+	setAvailableLocations() {
+		this.api !== "BIO"
+			? (this.availableLocations = [
+					listLocations[0],
+					listLocations[1],
+					listLocations[2],
+					listLocations[3],
+			  ])
+			: (this.availableLocations = listLocations);
+	}
+	// console.log();
+
+	savedPersons = null;
+	savedLocations = [];
+
+	setSavedPersons() {
+		this.savedPersons = getSavedPersonsFromLocalStorage(this.api);
+	}
+
+	setSavedLocations() {
+		this.savedLocations = getSavedLocationsFromLocalStorage(this.api);
+	}
 
 	getAllAvailableAppointments = async () => {
-		const persons = this.savedPersons;
-		const locations = this.savedLocations;
-
-		const buildURL = (locationName, persons) => {
-			return `https://ind-appointment-checker.herokuapp.com/${locationName}/${persons}`;
+		const buildURL = (locationName) => {
+			return `https://ind-appointment-checker.herokuapp.com/${this.api}/${locationName}/${this.savedPersons}`;
 		};
 
 		const fetchData = async (url) => {
@@ -31,9 +54,9 @@ export class ResultsComponent extends HTMLElement {
 		const requestAllSortedData = async () => {
 			const allAppointments = [];
 
-			if (locations)
-				for (let location of locations) {
-					const url = buildURL(location, this.savedPersons);
+			if (this.savedLocations)
+				for (let location of this.savedLocations) {
+					const url = buildURL(location);
 
 					const locationName = location.split("_").join(" ");
 					const appointments = await fetchData(url);
@@ -46,12 +69,6 @@ export class ResultsComponent extends HTMLElement {
 					});
 				}
 
-			console.log(allAppointments);
-			const sortedAppointments = allAppointments.sort(
-				(a, b) => Number(a.date) - Number(b.date)
-			);
-			console.log(sortedAppointments);
-
 			return allAppointments.sort(
 				(a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
 			);
@@ -61,6 +78,12 @@ export class ResultsComponent extends HTMLElement {
 	};
 
 	async connectedCallback() {
+		const api = this.dataset.api;
+		this.setApi(api);
+		this.setAvailableLocations();
+		this.setSavedPersons();
+		this.setSavedLocations();
+		console.log(this.savedLocations);
 		if (this.savedLocations.length < 1) {
 			this.innerHTML = `No locations have been chosen yet. Please choose at least one location to continue`;
 			return;
@@ -72,7 +95,7 @@ export class ResultsComponent extends HTMLElement {
 			const location = this.savedLocations[key];
 			const name = location.split("_").join(" ");
 
-			if (this.savedLocations.length === listLocations.length) {
+			if (this.savedLocations.length === this.availableLocations.length) {
 				chosenLocations = "any location";
 				continue;
 			} else if (this.savedLocations.length === 1) {
@@ -84,8 +107,8 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		// const allAppointments = await this.getAllAvailableAppointments();
-		const allAppointments = allStubAppointments;
+		const allAppointments = await this.getAllAvailableAppointments();
+		// const allAppointments = allStubAppointments;
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found for <strong><em>${chosenLocations}.</em></strong> Try another location or try again later.`;

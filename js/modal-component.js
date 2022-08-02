@@ -8,7 +8,7 @@ export class ModalComponent extends HTMLElement {
 
 		this.innerHTML = `
     <span class="wrapper" onclick="event.stopPropagation()">
-        <${type}-modal></${type}-modal>
+        <${type}-modal data-api=${this.dataset.api}></${type}-modal>
         <span class="buttons__wrapper">
           <button class="btn secondary" id="cancel-btn">Cancel</button>
           <button class="btn primary" id="submit-btn">Submit</button>

@@ -8,12 +8,19 @@ export class PersonsAttentingModal extends HTMLElement {
 	constructor() {
 		super();
 	}
+	api = null;
+	setApi(api) {
+		this.api = api;
+	}
 
-	savedPersons = getSavedPersonsFromLocalStorage();
+	savedPersons = null;
+	setSavedPersons() {
+		this.savedPersons = getSavedPersonsFromLocalStorage(this.api);
+	}
 
 	savePersons() {
 		const input = document.getElementById("persons_attending_input");
-		savePersonsToLocalStorage(input.value);
+		savePersonsToLocalStorage(this.api, input.value);
 		reloadResultsElement();
 	}
 
@@ -31,6 +38,8 @@ export class PersonsAttentingModal extends HTMLElement {
 	}
 
 	connectedCallback() {
+		this.setApi(this.dataset.api);
+		this.setSavedPersons();
 		this.innerHTML = `
       <label for='persons_attending_input'>
         How many people need to attend?

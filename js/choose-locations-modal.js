@@ -9,8 +9,27 @@ export class ChooseLocationsModal extends HTMLElement {
 	constructor() {
 		super();
 	}
+	api = null;
+	setApi(api) {
+		this.api = api;
+	}
 
-	savedLocations = getSavedLocationsFromLocalStorage();
+	availableLocations = [];
+	setAvailableLocations() {
+		this.api !== "BIO"
+			? (this.availableLocations = [
+					listLocations[0],
+					listLocations[1],
+					listLocations[2],
+					listLocations[3],
+			  ])
+			: (this.availableLocations = listLocations);
+	}
+
+	savedLocations = [];
+	setSavedLocations() {
+		this.savedLocations = getSavedLocationsFromLocalStorage(this.api);
+	}
 
 	saveChoices() {
 		// get all checked locations
@@ -20,12 +39,16 @@ export class ChooseLocationsModal extends HTMLElement {
 		const checked = [...checkedInputs].map((input) => input.name);
 
 		// save to localStorage
-		saveLocationsToLocalStorage(checked);
+		saveLocationsToLocalStorage(this.api, checked);
 		// reload results section
 		reloadResultsElement();
 	}
 
 	connectedCallback() {
+		this.setApi(this.dataset.api);
+
+		this.setAvailableLocations();
+		this.setSavedLocations();
 		this.innerHTML = `
       <legend>
         Choose the locations you wish to check
@@ -36,8 +59,8 @@ export class ChooseLocationsModal extends HTMLElement {
 		optionsSpan.className = "options";
 
 		// Each of the location options
-		for (let key in listLocations) {
-			const location = listLocations[key];
+		for (let key in this.availableLocations) {
+			const location = this.availableLocations[key];
 			const name = location.name.split("_").join(" ");
 
 			const chosen = this.savedLocations.find(
@@ -56,7 +79,9 @@ export class ChooseLocationsModal extends HTMLElement {
 
 		// All locations checkbox
 		const allSelected =
-			this.savedLocations.length === listLocations.length ? "checked" : "";
+			this.savedLocations.length === this.availableLocations.length
+				? "checked"
+				: "";
 
 		optionsSpan.innerHTML += `
 			<label for="all_locations">

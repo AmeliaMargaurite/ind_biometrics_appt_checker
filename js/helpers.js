@@ -1,23 +1,45 @@
-export const getSavedLocationsFromLocalStorage = () =>
-	window.localStorage.getItem("locations")
-		? JSON.parse(window.localStorage.getItem("locations"))
+// GETTERS
+export const getAPIItems = (api) =>
+	window.localStorage.getItem(api)
+		? JSON.parse(window.localStorage.getItem(api))
 		: [];
 
-export const getSavedPersonsFromLocalStorage = () =>
-	window.localStorage.getItem("persons")
-		? Number(JSON.parse(window.localStorage.getItem("persons")))
-		: 1;
-
-export const saveLocationsToLocalStorage = (array) => {
-	window.localStorage.setItem("locations", JSON.stringify(array));
+export const getSavedLocationsFromLocalStorage = (api) => {
+	const items = getAPIItems(api);
+	console.log({ items, api });
+	if (items?.locations?.length > 0) {
+		return items.locations;
+	}
+	return [];
 };
 
-export const savePersonsToLocalStorage = (num) => {
-	window.localStorage.setItem("persons", num);
+export const getSavedPersonsFromLocalStorage = (api) => {
+	const items = getAPIItems(api);
+	if (items?.persons > 0) {
+		return Number(items.persons);
+	}
+	return 1;
 };
 
+// SETTERS
+export const saveLocationsToLocalStorage = (api, array) => {
+	const items = getAPIItems(api);
+
+	window.localStorage.setItem(
+		api,
+		JSON.stringify({ ...items, locations: array })
+	);
+};
+
+export const savePersonsToLocalStorage = (api, num) => {
+	const items = getAPIItems(api);
+	window.localStorage.setItem(api, JSON.stringify({ ...items, persons: num }));
+};
+
+// UI
 export const reloadResultsElement = () => {
 	const oldResults = document.getElementsByTagName("results-component")[0];
 	const newResults = document.createElement("results-component");
+	newResults.dataset.api = oldResults.dataset.api;
 	oldResults.replaceWith(newResults);
 };

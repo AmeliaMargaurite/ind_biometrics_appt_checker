@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../css/main.css" />
+		<script src="../js/components.js" type="module"></script>
+		<title>Document Collection | IND Appointment Checker</title>
+	</head>
+	<body>
+		<header></header>
+		<section class="intro">
+			<h1 class="title">IND Document Collection Appointment Checker</h1>
+
+			<p class="disclaimer">
+				This site is a passion project, and is not associated with the IND. You
+				cannot book your appointment through this site, it is simply for
+				informational purposes only
+			</p>
+		</section>
+
+		<section class="results" id="results">
+			<results-component data-api="DOC"></results-component>
+			<span class="buttons__wrapper">
+				<button
+					class="btn"
+					id="choose_locations"
+					onclick="openModal('choose-locations')"
+				>
+					Choose locations
+				</button>
+				<button
+					class="btn"
+					id="persons_attending"
+					onclick="openModal('persons-attending')"
+				>
+					Persons attending
+				</button>
+			</span>
+		</section>
+		<footer></footer>
+		<script>
+			const openModal = (type) => {
+				const modal = document.createElement("modal-component");
+				modal.setAttribute("type", type);
+				modal.dataset.api = "DOC";
+				document.body.appendChild(modal);
+			};
+		</script>
+	</body>
+</html>

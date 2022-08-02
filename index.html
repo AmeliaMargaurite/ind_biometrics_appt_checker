@@ -11,31 +11,43 @@
 	<body>
 		<header></header>
 		<section class="intro">
-			<h1 class="title">IND Biometrics Appointment Checker</h1>
+			<h1 class="title">IND Appointment Checkers</h1>
+
 			<p class="disclaimer">
 				This site is a passion project, and is not associated with the IND. You
-				cannot book your appointment through this site, it is simply for
-				informational purposes only
+				cannot book your appointment through this site, it is for informational
+				purposes only
 			</p>
 		</section>
 
-		<section class="results" id="results">
-			<results-component></results-component>
-			<span class="buttons__wrapper">
-				<button
-					class="btn"
-					id="choose_locations"
-					onclick="openModal('choose-locations')"
+		<section class="appointments">
+			<p>
+				Information for these appointments have been copied from the IND
+				website. All care has been taken to ensure they are correct, however
+				please be sure to check the actual website to ensure you are looking for
+				the correct appointment time, and for any additional information.
+				<a
+					href="https://ind.nl/en/service-contact/make-an-appointment-with-the-ind"
+					>Make an appointment with the IND</a
 				>
-					Choose locations
-				</button>
-				<button
-					class="btn"
-					id="persons_attending"
-					onclick="openModal('persons-attending')"
-				>
-					Persons attending
-				</button>
+			</p>
+			<span class="cards__wrapper">
+				<a class="card" href="/biometrics">
+					<p class="title">Biometrics</p>
+					<span class="icon fingerprint large"> </span>
+				</a>
+				<a class="card" href="/documents">
+					<p class="title">Document collection</p>
+					<span class="icon file-writing large"></span>
+				</a>
+				<a class="card" href="/endorsement-sticker">
+					<p class="title">Residence endorsement sticker</p>
+					<span class="icon thumbsup large"></span>
+				</a>
+				<a class="card" href="/return-visa"
+					><p class="title">Return visa</p>
+					<span class="icon person-turning large"></span
+				></a>
 			</span>
 		</section>
 		<footer></footer>
