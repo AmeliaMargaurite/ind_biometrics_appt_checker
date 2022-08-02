@@ -43,7 +43,6 @@ export class ChooseLocationsModal extends HTMLElement {
 			);
 
 			const selected = chosen ? "checked" : "";
-			console.log(this.savedLocations, location.name, chosen, selected);
 
 			optionsSpan.innerHTML += `
       <label for="${location.name}">
@@ -78,6 +77,17 @@ export class ChooseLocationsModal extends HTMLElement {
 
 		const allLocationsCheckbox = document.getElementById("all_locations");
 		allLocationsCheckbox.onchange = () => toggleAll(allLocationsCheckbox);
+
+		for (let checkbox of allLocationCheckboxes) {
+			checkbox.onchange = () => {
+				const unchecked = [...allLocationCheckboxes].find(
+					(box) => box.checked === false
+				);
+				unchecked
+					? (allLocationsCheckbox.checked = false)
+					: (allLocationsCheckbox.checked = true);
+			};
+		}
 
 		const submitBtn = document.getElementById("submit-btn");
 		submitBtn.onclick = () => {
