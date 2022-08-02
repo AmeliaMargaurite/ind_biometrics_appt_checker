@@ -209,7 +209,8 @@
 }
 
 .disclaimer {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
+  font-style: italic;
   text-align: center;
 }
 
@@ -221,11 +222,19 @@
 }
 .results results-component {
   display: grid;
-  row-gap: 0.8rem;
+  row-gap: 2.4rem;
   text-align: center;
 }
 .results .result {
   font-size: 2.4rem;
+}
+.results .other-appts__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  -moz-column-gap: 3.2rem;
+       column-gap: 3.2rem;
+  justify-content: space-evenly;
+  row-gap: 3.2rem;
 }
 
 .btn {
@@ -374,4 +383,10 @@ section {
   section {
     width: 50vw;
   }
+}
+
+.divider {
+  width: 100%;
+  height: 0.2rem;
+  background: linear-gradient(45deg, var(--red500), var(--yellow500), var(--orange500));
 }/*# sourceMappingURL=main.css.map */

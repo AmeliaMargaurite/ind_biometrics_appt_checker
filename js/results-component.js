@@ -26,7 +26,6 @@ export class ResultsComponent extends HTMLElement {
 			  ])
 			: (this.availableLocations = listLocations);
 	}
-	// console.log();
 
 	savedPersons = null;
 	savedLocations = [];
@@ -53,39 +52,82 @@ export class ResultsComponent extends HTMLElement {
 
 		const requestAllSortedData = async () => {
 			const allAppointments = [];
-
+			const allAppointmentsByLocation = new Object();
 			if (this.savedLocations)
 				for (let location of this.savedLocations) {
 					const url = buildURL(location);
+					allAppointmentsByLocation[location] = [];
 
 					const locationName = location.split("_").join(" ");
 					const appointments = await fetchData(url);
+
 					appointments.forEach((appointment) => {
+						const dateString = new Date(appointment.date).toDateString();
+						const date = new Date(appointment.date);
+
 						allAppointments.push({
+							key: location,
 							location: locationName,
-							date: new Date(appointment.date).toDateString(),
+							date: date,
+							dateString: dateString,
+							startTime: appointment.startTime,
+						});
+
+						allAppointmentsByLocation[location].push({
+							key: location,
+							location: locationName,
+							date: date,
+							dateString: dateString,
 							startTime: appointment.startTime,
 						});
 					});
+
+					allAppointmentsByLocation[location].sort(
+						(a, b) => Number(a.date) - Number(b.date)
+					);
 				}
 
-			return allAppointments.sort(
-				(a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
-			);
+			allAppointments.sort((a, b) => Number(a.date) - Number(b.date));
+			// allAppointmentsByLocation.sort((a, b) =>
+			// 	a.key < b.key ? -1 : a.key > b.key ? 1 : 0
+			// );
+			return [allAppointments, allAppointmentsByLocation];
 		};
 
 		return requestAllSortedData();
 	};
 
 	async connectedCallback() {
+		// START
 		const api = this.dataset.api;
 		this.setApi(api);
 		this.setAvailableLocations();
 		this.setSavedPersons();
 		this.setSavedLocations();
-		console.log(this.savedLocations);
+
+		// BUTTONS
+		const buttons = `
+    <span class="buttons__wrapper">
+				<button
+					class="btn"
+					id="choose_locations"
+					onclick="openModal('choose-locations')"
+				>
+					Choose locations
+				</button>
+				<button
+					class="btn"
+					id="persons_attending"
+					onclick="openModal('persons-attending')"
+				>
+					Persons attending
+				</button>
+			</span>
+    `;
+
 		if (this.savedLocations.length < 1) {
 			this.innerHTML = `No locations have been chosen yet. Please choose at least one location to continue`;
+			this.innerHTML += buttons;
 			return;
 		}
 
@@ -107,23 +149,65 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		const allAppointments = await this.getAllAvailableAppointments();
-		// const allAppointments = allStubAppointments;
+		const [allAppointments, allAppointmentsByLocation] =
+			await this.getAllAvailableAppointments();
+
+		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
 
 		if (allAppointments.length < 1) {
-			this.innerHTML = `No available appointments have been found for <strong><em>${chosenLocations}.</em></strong> Try another location or try again later.`;
+			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
+				this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
+			}.</strong>Try another location or try again later.`;
+			this.innerHTML += buttons;
 			return;
 		}
 
 		const firstAppointment = allAppointments[0];
+		this.innerHTML = '<span class="divider"></span>';
 
-		this.innerHTML = `
-    <p>The next available appointment at <strong> ${chosenLocations} </strong> for <strong>${
+		this.innerHTML += `
+      <span>
+        <p>
+          The next available appointment at <strong> ${chosenLocations} </strong> for <strong>${
 			this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
-		}</strong> is:</p>
-    <span class="result">${firstAppointment.date}, ${
-			firstAppointment.startTime
-		} at ${firstAppointment.location} </span>
+		}</strong> is:
+        </p>
+        <span class="result">
+          ${firstAppointment.dateString}, ${firstAppointment.startTime} at ${
+			firstAppointment.location
+		} 
+        </span>
+      </span>
     `;
+		this.innerHTML += buttons;
+
+		this.innerHTML += '<span class="divider"></span>';
+
+		// OTHER APPOINTMENTS
+		const otherApptsWrapper = document.createElement("div");
+		otherApptsWrapper.className = "other-appts__wrapper";
+		const title = document.createElement("h2");
+		title.innerText = "Other appointments available at selected locations";
+		otherApptsWrapper.appendChild(title);
+
+		for (const key in allAppointmentsByLocation) {
+			const appointments = allAppointmentsByLocation[key];
+
+			const locationWrapper = document.createElement("span");
+			locationWrapper.innerHTML = `<h5>${key.split("_").join(" ")}</h5>`;
+
+			if (appointments.length > 0) {
+				for (let i = 0, n = appointments.length; i < n; i++) {
+					console.log(appointments[i]);
+					locationWrapper.innerHTML += `<p>${appointments[i].dateString} at ${appointments[i].startTime}</p>`;
+					if (i > 3) i = appointments.length;
+				}
+			} else {
+				locationWrapper.innerHTML += `<p>No appointments available</p>`;
+			}
+			otherApptsWrapper.appendChild(locationWrapper);
+		}
+
+		this.appendChild(otherApptsWrapper);
 	}
 }
