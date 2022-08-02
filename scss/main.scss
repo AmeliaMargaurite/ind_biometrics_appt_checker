@@ -1,8 +1,10 @@
 @import "./variables";
+@import "./icons";
 @import "./page";
 @import "./results";
 @import "./components";
 @import "./choose-locations";
+@import "./persons-attending";
 
 * {
 	padding: 0;
@@ -49,7 +51,15 @@ h5 {
 }
 
 section {
-	max-width: 768px;
+	width: 100%;
 	margin: auto;
 	padding: 0 3.2rem;
+
+	@media (min-width: $small) {
+		width: 75vw;
+	}
+
+	@media (min-width: $medium) {
+		width: 50vw;
+	}
 }

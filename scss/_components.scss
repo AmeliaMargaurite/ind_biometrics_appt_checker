@@ -3,6 +3,12 @@
 	background: var(--yellow500);
 	border: 1px solid var(--blue500);
 	border-radius: 0.4rem;
+	cursor: pointer;
+
+	&.disabled {
+		background: grey;
+		cursor: not-allowed;
+	}
 }
 
 .buttons__wrapper {

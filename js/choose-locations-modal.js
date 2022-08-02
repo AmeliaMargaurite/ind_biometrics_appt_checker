@@ -1,4 +1,8 @@
-import { getSavedLocations } from "./helpers.js";
+import {
+	getSavedLocationsFromLocalStorage,
+	reloadResultsElement,
+	saveLocationsToLocalStorage,
+} from "./helpers.js";
 import { listLocations } from "./locations.js";
 
 export class ChooseLocationsModal extends HTMLElement {
@@ -6,7 +10,7 @@ export class ChooseLocationsModal extends HTMLElement {
 		super();
 	}
 
-	savedLocations = getSavedLocations();
+	savedLocations = getSavedLocationsFromLocalStorage();
 
 	saveChoices() {
 		// get all checked locations
@@ -16,11 +20,9 @@ export class ChooseLocationsModal extends HTMLElement {
 		const checked = [...checkedInputs].map((input) => input.name);
 
 		// save to localStorage
-		window.localStorage.setItem("locations", JSON.stringify(checked));
+		saveLocationsToLocalStorage(checked);
 		// reload results section
-		const oldResults = document.getElementsByTagName("results-component")[0];
-		const newResults = document.createElement("results-component");
-		oldResults.replaceWith(newResults);
+		reloadResultsElement();
 	}
 
 	connectedCallback() {

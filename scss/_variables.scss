@@ -4,4 +4,15 @@
 	--red500: #cc365e;
 	--orange500: #f87242;
 	--yellow500: #ffba24;
+
+	--primary: var(--blue500);
 }
+
+// BREAKPOINTS
+
+$xxsmall: 425px;
+$xsmall: 501px;
+$small: 768px;
+$medium: 1024px;
+$large: 1440px;
+$xlarge: 2560px;

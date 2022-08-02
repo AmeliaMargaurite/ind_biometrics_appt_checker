@@ -1,4 +1,8 @@
-import { getSavedLocations, getSavedPersons } from "./helpers.js";
+import { allStubAppointments } from "./allAppointments.stub.js";
+import {
+	getSavedLocationsFromLocalStorage,
+	getSavedPersonsFromLocalStorage,
+} from "./helpers.js";
 import { listLocations } from "./locations.js";
 
 export class ResultsComponent extends HTMLElement {
@@ -6,29 +10,8 @@ export class ResultsComponent extends HTMLElement {
 		super();
 	}
 
-	savedPersons = getSavedPersons();
-	savedLocations = getSavedLocations();
-
-	// check local storage for saved preferences
-	setPersons(num) {
-		if (typeof num === "number") {
-			this.savedPersons = num;
-			window.localStorage.setItem("persons", JSON.stringify(num));
-		}
-	}
-
-	getPersons = () => {
-		return this.savedPersons;
-	};
-
-	setLocations = (array) => {
-		this.savedLocations = array;
-		window.localStorage.setItem("locations", JSON.stringify(array));
-	};
-
-	getLocations = () => {
-		return this.savedLocations;
-	};
+	savedPersons = getSavedPersonsFromLocalStorage();
+	savedLocations = getSavedLocationsFromLocalStorage();
 
 	getAllAvailableAppointments = async () => {
 		const persons = this.savedPersons;
@@ -50,8 +33,9 @@ export class ResultsComponent extends HTMLElement {
 
 			if (locations)
 				for (let location of locations) {
-					const url = buildURL(location.name, this.savedPersons);
-					const locationName = location.name.split("_").join(" ");
+					const url = buildURL(location, this.savedPersons);
+
+					const locationName = location.split("_").join(" ");
 					const appointments = await fetchData(url);
 					appointments.forEach((appointment) => {
 						allAppointments.push({
@@ -62,7 +46,15 @@ export class ResultsComponent extends HTMLElement {
 					});
 				}
 
-			return allAppointments.sort((a, b) => Number(a.date) - Number(b.date));
+			console.log(allAppointments);
+			const sortedAppointments = allAppointments.sort(
+				(a, b) => Number(a.date) - Number(b.date)
+			);
+			console.log(sortedAppointments);
+
+			return allAppointments.sort(
+				(a, b) => Number(new Date(a.date)) - Number(new Date(b.date))
+			);
 		};
 
 		return requestAllSortedData();
@@ -74,20 +66,6 @@ export class ResultsComponent extends HTMLElement {
 			return;
 		}
 
-		// const allAppointments = await this.getAllAvailableAppointments();
-		const tempData = [
-			{
-				date: new Date().toDateString(),
-				startTime: "09:00",
-				location: "IND Amsterdam",
-			},
-			{
-				date: new Date().toDateString(),
-				startTime: "10:00",
-				location: "IND Zwolle",
-			},
-		];
-		const firstAppointment = tempData[0];
 		let chosenLocations = "";
 
 		for (const key in this.savedLocations) {
@@ -105,6 +83,17 @@ export class ResultsComponent extends HTMLElement {
 				chosenLocations += "and " + name;
 			}
 		}
+
+		// const allAppointments = await this.getAllAvailableAppointments();
+		const allAppointments = allStubAppointments;
+
+		if (allAppointments.length < 1) {
+			this.innerHTML = `No available appointments have been found for <strong><em>${chosenLocations}.</em></strong> Try another location or try again later.`;
+			return;
+		}
+
+		const firstAppointment = allAppointments[0];
+
 		this.innerHTML = `
     <p>The next available appointment at <strong> ${chosenLocations} </strong> for <strong>${
 			this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
