@@ -216,12 +216,7 @@ export class ResultsComponent extends HTMLElement {
 		for (const key in allAppointmentsByLocation) {
 			const appointments = allAppointmentsByLocation[key];
 			const locationWrapper = document.createElement("extendable-list");
-
 			const uniqueDays = getAllUniqueDays(appointments);
-			const appointmentsPerUniqueDay = getAppointmentsPerUniqueDay(
-				uniqueDays,
-				appointments
-			);
 
 			// TODO -- set layout to display per unique day
 
@@ -237,8 +232,29 @@ export class ResultsComponent extends HTMLElement {
       `;
 
 			if (appointments.length > 0) {
-				for (let i = 0, n = appointments.length; i < n; i++) {
-					locationWrapper.innerHTML += `<p>${appointments[i].dateString} at ${appointments[i].startTime}</p>`;
+				const appointmentsPerUniqueDay = getAppointmentsPerUniqueDay(
+					uniqueDays,
+					appointments
+				);
+
+				for (const day of uniqueDays) {
+					const dayTitle = document.createElement("p");
+					dayTitle.className = "day__title";
+					dayTitle.id = day;
+					dayTitle.innerHTML = day;
+
+					const daysAppointments = appointmentsPerUniqueDay[day];
+					const dayWrapper = document.createElement("span");
+					dayWrapper.className = "day__wrapper";
+
+					dayWrapper.append(dayTitle);
+
+					for (let i = 0, n = daysAppointments.length; i < n; i++) {
+						dayWrapper.innerHTML += `
+          <p class="appointment">${appointments[i].startTime}</p>
+          `;
+					}
+					locationWrapper.append(dayWrapper);
 				}
 			} else {
 				locationWrapper.innerHTML += `<p>No appointments available</p>`;
@@ -267,23 +283,23 @@ class ExtendableList extends HTMLElement {
 
 	appointments = [];
 	setAppointments() {
-		this.appointments = this.htmlChildren.filter((el) => el !== this.titleNode);
+		this.appointments = this.querySelectorAll(".day__wrapper");
 	}
 
 	// default max number is 5
 
 	setMaxAppointmentsShown() {
-		const maxAppointmentsShown = { current: 5 };
+		const maxAppointmentsShown = { current: 3 };
 		const decreaseAppointmentsShown = () => {
 			console.log("decrease");
 		};
 		const increaseAppointmentsShown = () => {
-			maxAppointmentsShown.current += 5;
-			const allAppointmentEl = this.querySelectorAll("p");
+			maxAppointmentsShown.current += 1;
+			const allAppointmentDays = this.querySelectorAll(".day__wrapper");
 
-			allAppointmentEl.forEach((el, key) => {
+			allAppointmentDays.forEach((el, key) => {
 				if (key < maxAppointmentsShown.current) {
-					el.style.display = "block";
+					el.classList.remove("hidden");
 				}
 			});
 		};
@@ -302,7 +318,7 @@ class ExtendableList extends HTMLElement {
 		this.innerHTML = "";
 
 		this.append(this.titleNode);
-
+		console.log(this.appointments);
 		const [
 			increaseAppointmentsShown,
 			decreaseAppointmentsShown,
@@ -315,8 +331,8 @@ class ExtendableList extends HTMLElement {
 			this.titleNode.innerText + "_appointments__wrapper";
 
 		for (let i = 0, n = this.appointments.length; i < n; i++) {
-			if (i >= maxAppointmentsShown.current + 2) {
-				this.appointments[i].style.display = "none";
+			if (i >= maxAppointmentsShown.current) {
+				this.appointments[i].classList.add("hidden");
 			}
 			appointmentsWrapper.append(this.appointments[i]);
 		}
@@ -327,9 +343,7 @@ class ExtendableList extends HTMLElement {
 			const showMoreBtn = document.createElement("button");
 			showMoreBtn.className = "btn secondary";
 			showMoreBtn.innerHTML = 'Show More <span class="icon plus small"></span>';
-
 			showMoreBtn.onclick = increaseAppointmentsShown;
-
 			this.append(showMoreBtn);
 		}
 	}

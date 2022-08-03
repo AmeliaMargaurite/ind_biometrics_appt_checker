@@ -1,3 +1,14 @@
+.title {
+	text-align: center;
+	font-size: 2rem;
+}
+
+.disclaimer {
+	font-size: 1.2rem;
+	font-style: italic;
+	text-align: center;
+}
+
 .results {
 	display: grid;
 	justify-content: center;
@@ -38,18 +49,24 @@
 	}
 
 	.other-appts__wrapper {
-		display: flex;
-		flex-wrap: wrap;
+		display: grid;
 		column-gap: 3.2rem;
 		justify-content: space-evenly;
 		row-gap: 3.2rem;
+
+		& h2 {
+			grid-column: 1/-1;
+		}
+		@media (min-width: $small) {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	extendable-list {
 		display: grid;
 		justify-items: center;
 		grid-template-rows: max-content auto max-content;
-		row-gap: 0.8rem;
+		row-gap: 1.6rem;
 		background: white;
 		padding: 2.4rem;
 		border: 1px solid #0000004a;
@@ -58,6 +75,29 @@
 
 		& .subtext {
 			font-size: 1.4rem;
+		}
+
+		& .day__wrapper {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.8rem;
+			border-bottom: 1px solid #00000017;
+			padding: 0.8rem;
+
+			&.hidden {
+				display: none;
+			}
+		}
+
+		& .day__title {
+			width: 100%;
+			font-weight: 600;
+		}
+
+		& .appointment {
+			border: 1px solid black;
+			padding: 0.4rem;
+			border-radius: 50rem;
 		}
 	}
 }
