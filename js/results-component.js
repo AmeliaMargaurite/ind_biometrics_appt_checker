@@ -149,9 +149,9 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		// const [allAppointments, allAppointmentsByLocation] =
-		// 	await this.getAllAvailableAppointments();
-		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		const [allAppointments, allAppointmentsByLocation] =
+			await this.getAllAvailableAppointments();
+		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
@@ -217,8 +217,6 @@ export class ResultsComponent extends HTMLElement {
 			const appointments = allAppointmentsByLocation[key];
 			const locationWrapper = document.createElement("extendable-list");
 			const uniqueDays = getAllUniqueDays(appointments);
-
-			// TODO -- set layout to display per unique day
 
 			locationWrapper.innerHTML = `
         <div class="title__wrapper">
