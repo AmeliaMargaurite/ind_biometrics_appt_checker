@@ -1,4 +1,7 @@
 .btn {
+	display: flex;
+	align-items: center;
+	column-gap: 0.4rem;
 	padding: 0.8rem 1.6rem;
 	background: var(--yellow500);
 	border: 1px solid var(--blue500);

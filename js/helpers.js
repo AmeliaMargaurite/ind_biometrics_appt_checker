@@ -6,7 +6,6 @@ export const getAPIItems = (api) =>
 
 export const getSavedLocationsFromLocalStorage = (api) => {
 	const items = getAPIItems(api);
-	console.log({ items, api });
 	if (items?.locations?.length > 0) {
 		return items.locations;
 	}

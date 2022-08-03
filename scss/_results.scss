@@ -4,6 +4,13 @@
 	align-items: center;
 	row-gap: 2.4rem;
 
+	& .main-results__wrapper {
+		background: white;
+		padding: 2.4rem;
+		border: 1px solid #0000004a;
+		border-radius: 0.4rem;
+	}
+
 	results-component {
 		display: grid;
 		row-gap: 2.4rem;
@@ -11,7 +18,23 @@
 	}
 
 	.result {
+		position: relative;
+		display: block;
+		width: fit-content;
+		margin: 3.2rem auto;
 		font-size: 2.4rem;
+		z-index: 0;
+
+		&::after {
+			position: absolute;
+			content: "";
+			width: 100%;
+			height: 0.2rem;
+			background: var(--yellow500);
+			bottom: 0.3rem;
+			left: 0;
+			z-index: -1;
+		}
 	}
 
 	.other-appts__wrapper {
@@ -20,5 +43,21 @@
 		column-gap: 3.2rem;
 		justify-content: space-evenly;
 		row-gap: 3.2rem;
+	}
+
+	extendable-list {
+		display: grid;
+		justify-items: center;
+		grid-template-rows: max-content auto max-content;
+		row-gap: 0.8rem;
+		background: white;
+		padding: 2.4rem;
+		border: 1px solid #0000004a;
+		border-radius: 0.4rem;
+		height: fit-content;
+
+		& .subtext {
+			font-size: 1.4rem;
+		}
 	}
 }

@@ -149,10 +149,9 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		const [allAppointments, allAppointmentsByLocation] =
-			await this.getAllAvailableAppointments();
-
-		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		// const [allAppointments, allAppointmentsByLocation] =
+		// 	await this.getAllAvailableAppointments();
+		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
@@ -163,9 +162,12 @@ export class ResultsComponent extends HTMLElement {
 		}
 
 		const firstAppointment = allAppointments[0];
-		this.innerHTML = '<span class="divider"></span>';
+		// this.innerHTML = '<span class="divider"></span>';
 
-		this.innerHTML += `
+		const mainResultsWrapper = document.createElement("div");
+		mainResultsWrapper.className = "main-results__wrapper";
+
+		mainResultsWrapper.innerHTML = `
       <span>
         <p>
           The next available appointment at <strong> ${chosenLocations} </strong> for <strong>${
@@ -179,9 +181,9 @@ export class ResultsComponent extends HTMLElement {
         </span>
       </span>
     `;
-		this.innerHTML += buttons;
-
-		this.innerHTML += '<span class="divider"></span>';
+		mainResultsWrapper.innerHTML += buttons;
+		this.append(mainResultsWrapper);
+		// this.innerHTML += '<span class="divider"></span>';
 
 		// OTHER APPOINTMENTS
 		const otherApptsWrapper = document.createElement("div");
@@ -190,24 +192,147 @@ export class ResultsComponent extends HTMLElement {
 		title.innerText = "Other appointments available at selected locations";
 		otherApptsWrapper.appendChild(title);
 
+		const getAllUniqueDays = (appointments) => {
+			const allDates = appointments.map(
+				(appointment) => appointment.dateString
+			);
+
+			return allDates.filter(
+				(date, index, self) => self.indexOf(date) === index
+			);
+		};
+
+		const getAppointmentsPerUniqueDay = (uniqueDays, appointments) => {
+			let appointmentsPerUniqueDay = new Object();
+			uniqueDays.forEach((day) => {
+				const thisDaysAppointments = appointments.filter(
+					(appointment) => appointment.dateString === day
+				);
+				appointmentsPerUniqueDay[day] = thisDaysAppointments;
+			});
+			return appointmentsPerUniqueDay;
+		};
+
 		for (const key in allAppointmentsByLocation) {
 			const appointments = allAppointmentsByLocation[key];
+			const locationWrapper = document.createElement("extendable-list");
 
-			const locationWrapper = document.createElement("span");
-			locationWrapper.innerHTML = `<h5>${key.split("_").join(" ")}</h5>`;
+			const uniqueDays = getAllUniqueDays(appointments);
+			const appointmentsPerUniqueDay = getAppointmentsPerUniqueDay(
+				uniqueDays,
+				appointments
+			);
+
+			// TODO -- set layout to display per unique day
+
+			locationWrapper.innerHTML = `
+        <div class="title__wrapper">
+          <h5 class="title">${key.split("_").join(" ")}</h5>
+          <span class="subtext">
+          ${
+						appointments.length ? appointments.length : "0"
+					} appointments available across ${uniqueDays.length} days 
+          </span>
+        </div>
+      `;
 
 			if (appointments.length > 0) {
 				for (let i = 0, n = appointments.length; i < n; i++) {
-					console.log(appointments[i]);
 					locationWrapper.innerHTML += `<p>${appointments[i].dateString} at ${appointments[i].startTime}</p>`;
-					if (i > 3) i = appointments.length;
 				}
 			} else {
 				locationWrapper.innerHTML += `<p>No appointments available</p>`;
 			}
 			otherApptsWrapper.appendChild(locationWrapper);
 		}
-
 		this.appendChild(otherApptsWrapper);
 	}
 }
+
+class ExtendableList extends HTMLElement {
+	constructor() {
+		super();
+	}
+	htmlChildren = [];
+	setHTMLChildren(obj) {
+		this.htmlChildren = Object.keys(obj).map((key) => obj[key]);
+	}
+
+	titleNode = "";
+	setTitleNode() {
+		this.titleNode = this.htmlChildren.find((el) =>
+			el?.classList?.contains("title__wrapper")
+		);
+	}
+
+	appointments = [];
+	setAppointments() {
+		this.appointments = this.htmlChildren.filter((el) => el !== this.titleNode);
+	}
+
+	// default max number is 5
+
+	setMaxAppointmentsShown() {
+		const maxAppointmentsShown = { current: 5 };
+		const decreaseAppointmentsShown = () => {
+			console.log("decrease");
+		};
+		const increaseAppointmentsShown = () => {
+			maxAppointmentsShown.current += 5;
+			const allAppointmentEl = this.querySelectorAll("p");
+
+			allAppointmentEl.forEach((el, key) => {
+				if (key < maxAppointmentsShown.current) {
+					el.style.display = "block";
+				}
+			});
+		};
+
+		return [
+			increaseAppointmentsShown,
+			decreaseAppointmentsShown,
+			maxAppointmentsShown,
+		];
+	}
+
+	connectedCallback() {
+		this.setHTMLChildren(this.childNodes);
+		this.setTitleNode();
+		this.setAppointments();
+		this.innerHTML = "";
+
+		this.append(this.titleNode);
+
+		const [
+			increaseAppointmentsShown,
+			decreaseAppointmentsShown,
+			maxAppointmentsShown,
+		] = this.setMaxAppointmentsShown();
+
+		const appointmentsWrapper = document.createElement("span");
+		appointmentsWrapper.className = "appointments__wrapper";
+		appointmentsWrapper.id =
+			this.titleNode.innerText + "_appointments__wrapper";
+
+		for (let i = 0, n = this.appointments.length; i < n; i++) {
+			if (i >= maxAppointmentsShown.current + 2) {
+				this.appointments[i].style.display = "none";
+			}
+			appointmentsWrapper.append(this.appointments[i]);
+		}
+
+		this.append(appointmentsWrapper);
+
+		if (this.appointments.length > maxAppointmentsShown.current) {
+			const showMoreBtn = document.createElement("button");
+			showMoreBtn.className = "btn secondary";
+			showMoreBtn.innerHTML = 'Show More <span class="icon plus small"></span>';
+
+			showMoreBtn.onclick = increaseAppointmentsShown;
+
+			this.append(showMoreBtn);
+		}
+	}
+}
+
+customElements.define("extendable-list", ExtendableList);
