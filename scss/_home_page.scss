@@ -5,19 +5,22 @@
 	& .cards__wrapper {
 		display: grid;
 		row-gap: 1.6rem;
+		margin: auto;
 	}
 
 	& .card {
 		display: grid;
 		justify-items: center;
-		padding: 1.6rem 0;
+		padding: 1.6rem;
 		border-radius: 0.8rem;
 		row-gap: 0.4rem;
 		color: var(--blue500);
 		cursor: pointer;
+		transition: background-color 0.25s ease-in;
 
 		&:hover {
-			background: var(--yellow500);
+			background-color: var(--yellow500);
+			transition: background-color 0.25s ease-out;
 		}
 	}
 }

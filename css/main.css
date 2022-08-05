@@ -190,18 +190,21 @@
 .appointments .cards__wrapper {
   display: grid;
   row-gap: 1.6rem;
+  margin: auto;
 }
 .appointments .card {
   display: grid;
   justify-items: center;
-  padding: 1.6rem 0;
+  padding: 1.6rem;
   border-radius: 0.8rem;
   row-gap: 0.4rem;
   color: var(--blue500);
   cursor: pointer;
+  transition: background-color 0.25s ease-in;
 }
 .appointments .card:hover {
-  background: var(--yellow500);
+  background-color: var(--yellow500);
+  transition: background-color 0.25s ease-out;
 }
 
 .title {
@@ -226,6 +229,10 @@
   padding: 2.4rem;
   border: 1px solid rgba(0, 0, 0, 0.2901960784);
   border-radius: 0.4rem;
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  margin: auto;
 }
 .results results-component {
   display: grid;
@@ -322,6 +329,9 @@
   border: 1px solid var(--blue500);
   border-radius: 0.4rem;
   margin: auto;
+  max-height: -webkit-max-content;
+  max-height: -moz-max-content;
+  max-height: max-content;
   cursor: pointer;
 }
 .btn.disabled {
@@ -332,6 +342,19 @@
 .buttons__wrapper {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 0.8rem;
+}
+.buttons__wrapper .btn {
+  width: 100%;
+  justify-content: center;
+}
+@media (min-width: 768px) {
+  .buttons__wrapper .btn {
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+  }
 }
 
 modal-component {
