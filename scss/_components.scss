@@ -8,7 +8,12 @@
 	border-radius: 0.4rem;
 	margin: auto;
 	max-height: max-content;
+	box-shadow: 0 2px 8px -4px var(--blue500);
 	cursor: pointer;
+
+	&:hover {
+		box-shadow: 0 0px 6px -4px var(--blue500);
+	}
 
 	&.disabled {
 		background: grey;
@@ -21,6 +26,7 @@
 	justify-content: space-between;
 	flex-wrap: wrap;
 	row-gap: 0.8rem;
+	column-gap: 2.4rem;
 
 	& .btn {
 		width: 100%;
@@ -37,10 +43,13 @@ modal-component {
 	display: grid;
 	inset: 0;
 	background: rgba(0, 0, 0, 0.733);
+	justify-content: center;
+	align-items: center;
+	padding: 3.2rem;
 
 	.wrapper {
-		position: absolute;
 		display: grid;
+		row-gap: 3.2rem;
 		grid-template-rows: auto max-content;
 		inset: 3.2rem;
 		background: white;

@@ -93,9 +93,7 @@ export class ResultsComponent extends HTMLElement {
 				}
 
 			allAppointments.sort((a, b) => Number(a.date) - Number(b.date));
-			// allAppointmentsByLocation.sort((a, b) =>
-			// 	a.key < b.key ? -1 : a.key > b.key ? 1 : 0
-			// );
+
 			return [allAppointments, allAppointmentsByLocation];
 		};
 
@@ -112,7 +110,7 @@ export class ResultsComponent extends HTMLElement {
 
 		// BUTTONS
 		const buttons = `
-    <span class="buttons__wrapper">
+      <span class="buttons__wrapper">
 				<button
 					class="btn"
 					id="choose_locations"
@@ -154,10 +152,10 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		// const [allAppointments, allAppointmentsByLocation] =
-		// 	await this.getAllAvailableAppointments();
-		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
-		// console.log(allAppointments, allAppointmentsByLocation);
+		const [allAppointments, allAppointmentsByLocation] =
+			await this.getAllAvailableAppointments();
+		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
 				this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
@@ -272,8 +270,7 @@ class ExtendableList extends HTMLElement {
 		this.appointments = this.querySelectorAll(".day__wrapper");
 	}
 
-	// default max number is 5
-
+	// default max number is 3
 	setMaxAppointmentsShown() {
 		const maxAppointmentsShown = { current: 3 };
 		const decreaseAppointmentsShown = () => {

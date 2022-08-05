@@ -4,11 +4,15 @@ persons-attending-modal {
 	align-content: center;
 	justify-items: center;
 	row-gap: 1.6rem;
-
+	max-width: fit-content;
 	label {
-		font-size: 2.4rem;
+		font-size: 1.6rem;
 		font-weight: 600;
 		text-align: center;
+
+		@media (min-width: $small) {
+			font-size: 2.4rem;
+		}
 	}
 
 	.control__wrapper {
@@ -29,6 +33,15 @@ persons-attending-modal {
 
 		&[type="number"] {
 			-moz-apperance: textfield;
+		}
+	}
+	& .error {
+		color: var(--red500);
+		line-height: 1;
+		text-align: center;
+
+		&.hidden {
+			display: none;
 		}
 	}
 }
