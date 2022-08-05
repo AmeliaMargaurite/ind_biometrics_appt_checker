@@ -58,6 +58,10 @@
 			grid-column: 1/-1;
 		}
 		@media (min-width: $small) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		@media (min-width: $medium) {
 			grid-template-columns: repeat(3, 1fr);
 		}
 	}

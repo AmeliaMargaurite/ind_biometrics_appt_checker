@@ -264,6 +264,11 @@
 }
 @media (min-width: 768px) {
   .results .other-appts__wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .results .other-appts__wrapper {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -316,6 +321,7 @@
   background: var(--yellow500);
   border: 1px solid var(--blue500);
   border-radius: 0.4rem;
+  margin: auto;
   cursor: pointer;
 }
 .btn.disabled {
@@ -454,7 +460,7 @@ section {
   margin: auto;
   padding: 0 3.2rem;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1440px) {
   section {
     width: 75vw;
   }

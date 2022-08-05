@@ -4,6 +4,11 @@ import {
 	getSavedPersonsFromLocalStorage,
 } from "./helpers.js";
 import { listLocations } from "./locations.js";
+import {
+	getAllUniqueDays,
+	getAppointmentsGroupedOrderedByQuantity,
+	getAppointmentsPerUniqueDay,
+} from "./results_helpers.js";
 
 export class ResultsComponent extends HTMLElement {
 	constructor() {
@@ -149,10 +154,10 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		const [allAppointments, allAppointmentsByLocation] =
-			await this.getAllAvailableAppointments();
-		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
-
+		// const [allAppointments, allAppointmentsByLocation] =
+		// 	await this.getAllAvailableAppointments();
+		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		// console.log(allAppointments, allAppointmentsByLocation);
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
 				this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
@@ -162,7 +167,6 @@ export class ResultsComponent extends HTMLElement {
 		}
 
 		const firstAppointment = allAppointments[0];
-		// this.innerHTML = '<span class="divider"></span>';
 
 		const mainResultsWrapper = document.createElement("div");
 		mainResultsWrapper.className = "main-results__wrapper";
@@ -183,7 +187,6 @@ export class ResultsComponent extends HTMLElement {
     `;
 		mainResultsWrapper.innerHTML += buttons;
 		this.append(mainResultsWrapper);
-		// this.innerHTML += '<span class="divider"></span>';
 
 		// OTHER APPOINTMENTS
 		const otherApptsWrapper = document.createElement("div");
@@ -192,35 +195,20 @@ export class ResultsComponent extends HTMLElement {
 		title.innerText = "Other appointments available at selected locations";
 		otherApptsWrapper.appendChild(title);
 
-		const getAllUniqueDays = (appointments) => {
-			const allDates = appointments.map(
-				(appointment) => appointment.dateString
-			);
+		const orderedAppointmentsByLocation =
+			getAppointmentsGroupedOrderedByQuantity(allAppointmentsByLocation);
 
-			return allDates.filter(
-				(date, index, self) => self.indexOf(date) === index
-			);
-		};
-
-		const getAppointmentsPerUniqueDay = (uniqueDays, appointments) => {
-			let appointmentsPerUniqueDay = new Object();
-			uniqueDays.forEach((day) => {
-				const thisDaysAppointments = appointments.filter(
-					(appointment) => appointment.dateString === day
-				);
-				appointmentsPerUniqueDay[day] = thisDaysAppointments;
-			});
-			return appointmentsPerUniqueDay;
-		};
-
-		for (const key in allAppointmentsByLocation) {
-			const appointments = allAppointmentsByLocation[key];
+		for (const key in orderedAppointmentsByLocation) {
+			const appointments = orderedAppointmentsByLocation[key];
 			const locationWrapper = document.createElement("extendable-list");
 			const uniqueDays = getAllUniqueDays(appointments);
 
+			// strips the number used for ordering list, gives just the location title.
+			const locationTitle = key.split("_").splice(1).join(" ");
+
 			locationWrapper.innerHTML = `
         <div class="title__wrapper">
-          <h5 class="title">${key.split("_").join(" ")}</h5>
+          <h5 class="title">${locationTitle}</h5>
           <span class="subtext">
           ${
 						appointments.length ? appointments.length : "0"
@@ -316,7 +304,7 @@ class ExtendableList extends HTMLElement {
 		this.innerHTML = "";
 
 		this.append(this.titleNode);
-		console.log(this.appointments);
+
 		const [
 			increaseAppointmentsShown,
 			decreaseAppointmentsShown,
