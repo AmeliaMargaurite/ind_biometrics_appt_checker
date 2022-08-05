@@ -152,9 +152,9 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		// const [allAppointments, allAppointmentsByLocation] =
-		// 	await this.getAllAvailableAppointments();
-		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		const [allAppointments, allAppointmentsByLocation] =
+			await this.getAllAvailableAppointments();
+		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
