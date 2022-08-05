@@ -199,6 +199,7 @@ export class ResultsComponent extends HTMLElement {
 		for (const key in orderedAppointmentsByLocation) {
 			const appointments = orderedAppointmentsByLocation[key];
 			const locationWrapper = document.createElement("extendable-list");
+			locationWrapper.id = key.split("_").splice(1).join("_");
 			const uniqueDays = getAllUniqueDays(appointments);
 
 			// strips the number used for ordering list, gives just the location title.
@@ -276,7 +277,7 @@ class ExtendableList extends HTMLElement {
 		const decreaseAppointmentsShown = () => {
 			console.log("decrease");
 		};
-		const increaseAppointmentsShown = () => {
+		const increaseAppointmentsShown = (showMoreBtnID) => {
 			maxAppointmentsShown.current += 1;
 			const allAppointmentDays = this.querySelectorAll(".day__wrapper");
 
@@ -284,6 +285,20 @@ class ExtendableList extends HTMLElement {
 				if (key < maxAppointmentsShown.current) {
 					el.classList.remove("hidden");
 				}
+			});
+			const test = this;
+			// scroll with new additions
+
+			const btn = document.getElementById(showMoreBtnID);
+
+			// half of the row-gap of this wrapper;
+			const magicNum = 16;
+
+			// using scrollTo instead of scrollIntoView as safari doesn't accept params
+			// accepting that this will not scroll for IE.
+			window.scrollTo({
+				top: this.offsetTop + this.offsetHeight - window.innerHeight + magicNum,
+				behavior: "smooth",
 			});
 		};
 
@@ -310,8 +325,7 @@ class ExtendableList extends HTMLElement {
 
 		const appointmentsWrapper = document.createElement("span");
 		appointmentsWrapper.className = "appointments__wrapper";
-		appointmentsWrapper.id =
-			this.titleNode.innerText + "_appointments__wrapper";
+		appointmentsWrapper.id = this.id + "_appointments__wrapper";
 
 		for (let i = 0, n = this.appointments.length; i < n; i++) {
 			if (i >= maxAppointmentsShown.current) {
@@ -326,7 +340,10 @@ class ExtendableList extends HTMLElement {
 			const showMoreBtn = document.createElement("button");
 			showMoreBtn.className = "btn secondary";
 			showMoreBtn.innerHTML = 'Show More <span class="icon plus small"></span>';
-			showMoreBtn.onclick = increaseAppointmentsShown;
+			const showMoreBtnID = this.titleNode.innerText + "show-more__btn";
+			showMoreBtn.id = showMoreBtnID;
+			showMoreBtn.onclick = () => increaseAppointmentsShown(showMoreBtnID);
+
 			this.append(showMoreBtn);
 		}
 	}
