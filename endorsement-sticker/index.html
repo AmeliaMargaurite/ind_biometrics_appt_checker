@@ -11,26 +11,31 @@
 	<body>
 		<header></header>
 		<section class="intro">
-			<h1 class="title">IND Endorsement Sticker Appointment Checker</h1>
+			<h1 class="title">
+				IND
+				<span class="appointment-type">Endorsement Sticker</span> Appointment
+				Checker
+			</h1>
 
 			<p class="disclaimer">
 				This site is a passion project, and is not associated with the IND. You
 				cannot book your appointment through this site, it is simply for
 				informational purposes only
 			</p>
-			<p class="link-to-ind">
-				For information on residence endorsement stickers and to book your
-				appointment
-				<a
-					href="https://ind.nl/en/appointment-residence-endorsement-sticker"
-					target="_blank"
-					>click here
-				</a>
-			</p>
 		</section>
 
 		<section class="results" id="results">
-			<results-component data-api="VAA"></results-component>
+			<results-component data-api="VAA">
+				<p class="link-to-ind">
+					For information on residence endorsement stickers and to book your
+					appointment
+					<a
+						href="https://ind.nl/en/appointment-residence-endorsement-sticker"
+						target="_blank"
+						>click here
+					</a>
+				</p>
+			</results-component>
 		</section>
 		<footer></footer>
 		<script>

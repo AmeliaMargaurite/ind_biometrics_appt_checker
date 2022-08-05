@@ -1,0 +1,3 @@
+@mixin adjustFontSize($initialSize) {
+	font-size: calc($initialSize + 0.5vw);
+}

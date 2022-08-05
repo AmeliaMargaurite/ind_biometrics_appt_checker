@@ -209,13 +209,18 @@
 
 .title {
   text-align: center;
-  font-size: 2rem;
 }
 
 .disclaimer {
   font-size: 1.2rem;
   font-style: italic;
   text-align: center;
+}
+
+.appointment-type {
+  font-size: inherit;
+  color: var(--purple500);
+  position: relative;
 }
 
 .results {
@@ -333,6 +338,7 @@
   max-height: -moz-max-content;
   max-height: max-content;
   box-shadow: 0 2px 8px -4px var(--blue500);
+  font-weight: 600;
   cursor: pointer;
 }
 .btn:hover {
@@ -483,33 +489,37 @@ body {
 body *:not(h1, h2, h3, h4, h5, h6, legend) {
   font-size: 1.6rem;
 }
-body * strong {
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong {
   font-weight: 600;
+  line-height: 1em;
 }
 
 h1 {
-  font-size: 3.2rem;
-  font-weight: 600;
+  font-size: calc(3.2rem + 0.5vw);
+  line-height: 1em;
 }
 
 h2 {
-  font-size: 2.8rem;
-  font-weight: 600;
+  font-size: calc(2.8rem + 0.5vw);
 }
 
 h3 {
-  font-size: 2.4rem;
-  font-weight: 600;
+  font-size: calc(2.4rem + 0.5vw);
 }
 
 h4 {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: calc(2rem + 0.5vw);
 }
 
 h5 {
-  font-size: 1.6rem;
-  font-weight: 600;
+  font-size: calc(1.6rem + 0.5vw);
 }
 
 section {
