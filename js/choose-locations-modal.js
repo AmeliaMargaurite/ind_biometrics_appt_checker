@@ -70,8 +70,8 @@ export class ChooseLocationsModal extends HTMLElement {
 			const selected = chosen ? "checked" : "";
 
 			optionsSpan.innerHTML += `
-      <label for="${location.name}">
-        <input type="checkbox" name="${location.name}" id="${location.name}" ${selected} />
+      <label for="${location.name}__checkbox">
+        <input type="checkbox" name="${location.name}" id="${location.name}__checkbox" ${selected} />
         ${name}
       </label>
       `;
@@ -85,7 +85,7 @@ export class ChooseLocationsModal extends HTMLElement {
 
 		optionsSpan.innerHTML += `
 			<label for="all_locations">
-				<input type="checkbox" name="all_locations" id="all_locations" ${allSelected}/>
+				<input type="checkbox" name="all_locations" id="all_locations" ${allSelected} />
 				All locations
 			</label>
 		`;
