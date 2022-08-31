@@ -152,9 +152,9 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		const [allAppointments, allAppointmentsByLocation] =
-			await this.getAllAvailableAppointments();
-		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		// const [allAppointments, allAppointmentsByLocation] =
+		// 	await this.getAllAvailableAppointments();
+		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
@@ -300,6 +300,10 @@ class ExtendableList extends HTMLElement {
 				top: this.offsetTop + this.offsetHeight - window.innerHeight + magicNum,
 				behavior: "smooth",
 			});
+
+			if (this.appointments.length <= maxAppointmentsShown.current) {
+				btn.remove();
+			}
 		};
 
 		return [
