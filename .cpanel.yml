@@ -1,0 +1,13 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home2/ameliama/ind-checker.everlearning.com.au
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp -R biometrics $DEPLOYPATH
+    - /bin/cp -R css $DEPLOYPATH
+    - /bin/cp -R documents $DEPLOYPATH
+    - /bin/cp -R endorsement-sticker $DEPLOYPATH
+    - /bin/cp -R imgs $DEPLOYPATH
+    - /bin/cp -R js $DEPLOYPATH
+    - /bin/cp -R return-visa $DEPLOYPATH
+    - /bin/cp -R scss $DEPLOYPATH
