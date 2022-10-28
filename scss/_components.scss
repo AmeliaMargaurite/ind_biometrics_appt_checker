@@ -12,6 +12,16 @@
 	font-weight: 600;
 	cursor: pointer;
 
+	&.secondary {
+		background: var(--blue500);
+		color: var(--yellow500);
+		border-color: var(--yellow500);
+
+		& .icon {
+			background-color: var(--yellow500);
+		}
+	}
+
 	&:hover {
 		box-shadow: 0 0px 6px -4px var(--blue500);
 	}

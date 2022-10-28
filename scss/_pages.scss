@@ -10,6 +10,16 @@
 
 .appointment-type {
 	font-size: inherit;
-	color: var(--purple500);
+	color: var(--blue500);
 	position: relative;
+
+	&:after {
+		position: absolute;
+		content: "";
+		height: 2px;
+		width: 100%;
+		background: var(--yellow500);
+		left: 0;
+		bottom: 0.1em;
+	}
 }
