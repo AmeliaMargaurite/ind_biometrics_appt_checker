@@ -185,10 +185,10 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		// const [allAppointments, allAppointmentsByLocation] =
-		// 	await this.getAllAvailableAppointments();
-		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
-		this.setLoading(false); // comment out when using real data
+		const [allAppointments, allAppointmentsByLocation] =
+			await this.getAllAvailableAppointments();
+		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		// this.setLoading(false); // comment out when using real data
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
