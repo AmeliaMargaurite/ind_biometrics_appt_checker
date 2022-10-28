@@ -45,8 +45,14 @@ export class ResultsComponent extends HTMLElement {
 
 	getAllAvailableAppointments = async () => {
 		const buildURL = (locationName) => {
-			return `https://ind-checker-server.everlearning.com.au/${this.api}/${locationName}/${this.savedPersons}`;
+			const locationKey = listLocations.find(
+				(location) => location.name === locationName
+			);
+			return `https://ind-appointment-checker.herokuapp.com/${this.api}/${locationName}/${this.savedPersons}`;
+			// return `https://oap.ind.nl/oap/api/desks/${locationKey}/slots/?productKey=${this.api}&persons=${this.savedPersons}`;
 		};
+		// return `https://ind-checker-server.everlearning.com.au/${this.api}/${locationName}/${this.savedPersons}`;
+		// };
 
 		const fetchData = async (url) => {
 			const response = await fetch(url, {
