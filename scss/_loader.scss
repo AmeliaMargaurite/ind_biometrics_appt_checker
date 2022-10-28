@@ -1,0 +1,22 @@
+.loading__wrapper {
+	width: 20vmin;
+	height: 20vmin;
+	margin: auto;
+	border-radius: 50%;
+	border-bottom: 0px solid transparent;
+	border-right: 0px solid transparent;
+	border-left: 6px solid var(--yellow500);
+	border-top: 6px solid var(--yellow500);
+
+	animation: rotate-move 1s infinite linear;
+}
+
+@keyframes rotate-move {
+	0% {
+		transform: rotate(1deg);
+	}
+
+	100% {
+		transform: rotate(359deg);
+	}
+}

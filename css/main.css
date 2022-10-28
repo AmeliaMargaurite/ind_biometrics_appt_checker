@@ -237,22 +237,34 @@ scroll-to-top.hidden {
   transition: background-color 0.25s ease-out;
 }
 
-.title {
+.intro {
+  display: grid;
+  justify-items: center;
+  row-gap: 0.8rem;
+}
+.intro .title {
   text-align: center;
 }
-
-.disclaimer {
+.intro .icon__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  color: var(--blue500);
+}
+.intro .disclaimer {
   font-size: 1.2rem;
   font-style: italic;
   text-align: center;
 }
-
-.appointment-type {
+.intro .appointment-type {
   font-size: inherit;
   color: var(--blue500);
   position: relative;
 }
-.appointment-type:after {
+.intro .appointment-type:after {
   position: absolute;
   content: "";
   height: 2px;
@@ -260,6 +272,17 @@ scroll-to-top.hidden {
   background: var(--yellow500);
   left: 0;
   bottom: 0.1em;
+}
+@media (min-width: 1024px) {
+  .intro .title {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .intro .icon__wrapper {
+    justify-self: flex-start;
+    grid-row: 1/3;
+    grid-column: 1/-1;
+  }
 }
 
 .results {
@@ -515,6 +538,36 @@ persons-attending-modal .error.hidden {
   display: none;
 }
 
+.loading__wrapper {
+  width: 20vmin;
+  height: 20vmin;
+  margin: auto;
+  border-radius: 50%;
+  border-bottom: 0px solid transparent;
+  border-right: 0px solid transparent;
+  border-left: 6px solid var(--yellow500);
+  border-top: 6px solid var(--yellow500);
+  -webkit-animation: rotate-move 1s infinite linear;
+          animation: rotate-move 1s infinite linear;
+}
+
+@-webkit-keyframes rotate-move {
+  0% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes rotate-move {
+  0% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
 * {
   padding: 0;
   margin: 0;
@@ -576,7 +629,7 @@ section {
 }
 @media (min-width: 1440px) {
   section {
-    width: 50vw;
+    width: 70vw;
   }
 }
 
@@ -584,4 +637,15 @@ section {
   width: 100%;
   height: 0.2rem;
   background: linear-gradient(45deg, var(--red500), var(--yellow500), var(--orange500));
+}
+
+.link-to-ind {
+  margin: 3.2rem;
+  text-align: center;
+  background: var(--yellow500);
+  padding: 1.6rem;
+  box-shadow: 0 0 10px -3px var(--blue500);
+}
+.link-to-ind a {
+  font-size: 2.4rem;
 }/*# sourceMappingURL=main.css.map */

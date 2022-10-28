@@ -40,5 +40,13 @@ export const reloadResultsElement = () => {
 	const oldResults = document.getElementsByTagName("results-component")[0];
 	const newResults = document.createElement("results-component");
 	newResults.dataset.api = oldResults.dataset.api;
+	newResults.setAttribute("loading", true);
 	oldResults.replaceWith(newResults);
+};
+
+export const getBooleanFromString = (string) => {
+	console.log(string == "true");
+	if (string == "true") return true;
+	if (string == "false") return false;
+	return undefined;
 };

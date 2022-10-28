@@ -1,5 +1,6 @@
 import { allStubAppointments } from "./allAppointments.stub.js";
 import {
+	getBooleanFromString,
 	getSavedLocationsFromLocalStorage,
 	getSavedPersonsFromLocalStorage,
 } from "./helpers.js";
@@ -11,8 +12,36 @@ import {
 } from "./results_helpers.js";
 
 export class ResultsComponent extends HTMLElement {
+	static get observedAttributes() {
+		return ["loading"];
+	}
 	constructor() {
 		super();
+	}
+
+	loading = true;
+	setLoading(state) {
+		if (typeof state === "boolean") {
+			this.setAttribute("loading", state);
+		}
+	}
+
+	setLoaderDisplay(state) {
+		if (state) {
+			const loader = document.getElementById("loading__wrapper");
+			loader.style.display = "block";
+		} else {
+			const loader = document.getElementById("loading__wrapper");
+			loader.style.display = "none";
+		}
+	}
+
+	attributeChangedCallback(name, oldValue, newValue) {
+		if (name === "loading" && getBooleanFromString(newValue) == false) {
+			this.setLoaderDisplay(false);
+		} else if (name === "loading" && getBooleanFromString(newValue) == true) {
+			this.setLoaderDisplay(true);
+		}
 	}
 
 	api = null;
@@ -49,10 +78,7 @@ export class ResultsComponent extends HTMLElement {
 				(location) => location.name === locationName
 			);
 			return `https://ind-appointment-checker.herokuapp.com/${this.api}/${locationName}/${this.savedPersons}`;
-			// return `https://oap.ind.nl/oap/api/desks/${locationKey}/slots/?productKey=${this.api}&persons=${this.savedPersons}`;
 		};
-		// return `https://ind-checker-server.everlearning.com.au/${this.api}/${locationName}/${this.savedPersons}`;
-		// };
 
 		const fetchData = async (url) => {
 			const response = await fetch(url, {
@@ -99,7 +125,7 @@ export class ResultsComponent extends HTMLElement {
 				}
 
 			allAppointments.sort((a, b) => Number(a.date) - Number(b.date));
-
+			this.setLoading(false);
 			return [allAppointments, allAppointmentsByLocation];
 		};
 
@@ -137,6 +163,7 @@ export class ResultsComponent extends HTMLElement {
 		if (this.savedLocations.length < 1) {
 			this.innerHTML = `No locations have been chosen yet. Please choose at least one location to continue`;
 			this.innerHTML += buttons;
+			this.setLoading(false);
 			return;
 		}
 
@@ -158,9 +185,10 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		const [allAppointments, allAppointmentsByLocation] =
-			await this.getAllAvailableAppointments();
-		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		// const [allAppointments, allAppointmentsByLocation] =
+		// 	await this.getAllAvailableAppointments();
+		const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
+		this.setLoading(false); // comment out when using real data
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
@@ -196,7 +224,8 @@ export class ResultsComponent extends HTMLElement {
 		const otherApptsWrapper = document.createElement("div");
 		otherApptsWrapper.className = "other-appts__wrapper";
 		const title = document.createElement("h2");
-		title.innerText = "Other appointments available at selected locations";
+		title.innerText =
+			"Other appointments available at the selected location(s)";
 		otherApptsWrapper.appendChild(title);
 
 		const orderedAppointmentsByLocation =

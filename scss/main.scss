@@ -8,6 +8,7 @@
 @import "./components";
 @import "./choose-locations";
 @import "./persons-attending";
+@import "./loader";
 
 * {
 	padding: 0;
@@ -70,7 +71,7 @@ section {
 	padding: 0 3.2rem;
 
 	@media (min-width: $large) {
-		width: 50vw;
+		width: 70vw;
 	}
 }
 
@@ -83,4 +84,16 @@ section {
 		var(--yellow500),
 		var(--orange500)
 	);
+}
+
+.link-to-ind {
+	margin: 3.2rem;
+	text-align: center;
+	background: var(--yellow500);
+	padding: 1.6rem;
+	box-shadow: 0 0 10px -3px var(--blue500);
+	a {
+		font-size: 2.4rem;
+	}
+	// text-decoration: none;
 }

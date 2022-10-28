@@ -28,29 +28,15 @@
 	</head>
 	<body>
 		<header></header>
-		<section class="intro">
-			<h1 class="title">
-				IND <span class="appointment-type">Biometrics</span> Appointment Checker
-			</h1>
-			<p class="disclaimer">
-				This site is a passion project, and is not associated with the IND. You
-				cannot book your appointment through this site, it is simply for
-				informational purposes only
-			</p>
-		</section>
+		<section
+			is="introduction-el"
+			data-name="Biometrics"
+			data-link="https://ind.nl/en/after-your-application/biometrics-appointment-photo-signature-and-fingerprints"
+		></section>
 
 		<section class="results" id="results">
-			<results-component data-api="BIO">
-				<p class="link-to-ind">
-					For information on biometrics and to book your appointment
-
-					<a
-						href="https://ind.nl/en/after-your-application/biometrics-appointment-photo-signature-and-fingerprints"
-						target="_blank"
-						>click here
-					</a>
-				</p>
-			</results-component>
+			<span class="loading__wrapper" id="loading__wrapper"></span>
+			<results-component loading="true" data-api="BIO"> </results-component>
 		</section>
 		<scroll-to-top></scroll-to-top>
 		<footer></footer>
