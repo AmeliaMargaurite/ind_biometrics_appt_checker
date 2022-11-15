@@ -90,6 +90,7 @@ export class ResultsComponent extends HTMLElement {
 		const requestAllSortedData = async () => {
 			const allAppointments = [];
 			const allAppointmentsByLocation = new Object();
+
 			if (this.savedLocations)
 				for (let location of this.savedLocations) {
 					const url = buildURL(location);
@@ -100,7 +101,9 @@ export class ResultsComponent extends HTMLElement {
 
 					appointments.forEach((appointment) => {
 						const dateString = new Date(appointment.date).toDateString();
-						const date = new Date(appointment.date);
+						const date = new Date(
+							appointment.date + " " + appointment.startTime
+						);
 
 						allAppointments.push({
 							key: location,
@@ -271,7 +274,7 @@ export class ResultsComponent extends HTMLElement {
 
 					for (let i = 0, n = daysAppointments.length; i < n; i++) {
 						dayWrapper.innerHTML += `
-          <p class="appointment">${appointments[i].startTime}</p>
+          <p class="appointment">${daysAppointments[i].startTime}</p>
           `;
 					}
 					locationWrapper.append(dayWrapper);
