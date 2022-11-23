@@ -2,7 +2,7 @@ import { ChooseLocationsModal } from "./choose-locations-modal.js";
 import { Intro } from "./intro.js";
 import { ModalComponent } from "./modal-component.js";
 import { PersonsAttentingModal } from "./persons-attending-modal.js";
-import { ResultsComponent } from "./results-component-15-11-22.js";
+import { ResultsComponent } from "./results-component-23-11-22.js";
 import { ScrollToTop } from "./scroll-to-top.js";
 
 customElements.define("results-component", ResultsComponent);
