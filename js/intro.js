@@ -24,7 +24,7 @@ export class Intro extends HTMLElement {
 					href="${link}"
 					target="_blank"
 				>
-					Click here for information on ${name.toLowerCase()} and to book your appointment
+					Click here to go to the IND website for ${name.toLowerCase()}
 				</a>
 			</p>
 		`;
