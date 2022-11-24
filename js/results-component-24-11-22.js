@@ -180,7 +180,7 @@ export class ResultsComponent extends HTMLElement {
     `;
 
 		if (this.savedLocations.length < 1) {
-			this.innerHTML = `No locations have been chosen yet. Please choose at least one location to continue`;
+			this.innerHTML = `<p class="results__text">No locations have been chosen yet. Please choose at least one location to continue</p>`;
 			this.innerHTML += buttons;
 			this.setLoading(false);
 			return;
@@ -217,7 +217,7 @@ export class ResultsComponent extends HTMLElement {
 		const [allAppointments, allAppointmentsByLocation] = appointmentData;
 
 		if (allAppointments.length < 1) {
-			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
+			this.innerHTML = `<p class="results__text">No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
 				this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
 			}.</strong>Try another location or try again later.`;
 			this.innerHTML += buttons;
@@ -231,7 +231,7 @@ export class ResultsComponent extends HTMLElement {
 
 		mainResultsWrapper.innerHTML = `
       <span>
-        <p>
+        <p class="results__text">
           The next available appointment at <strong> ${chosenLocations} </strong> for <strong>${
 			this.savedPersons === 1 ? "1 person" : this.savedPersons + " persons"
 		}</strong> is:

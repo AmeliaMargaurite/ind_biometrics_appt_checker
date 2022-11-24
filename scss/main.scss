@@ -71,7 +71,7 @@ section {
 	padding: 0 3.2rem;
 
 	@media (min-width: $large) {
-		width: 70vw;
+		max-width: 70vw;
 	}
 }
 

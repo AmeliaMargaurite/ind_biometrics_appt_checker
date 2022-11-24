@@ -92,6 +92,22 @@ export class ChooseLocationsModal extends HTMLElement {
 
 		this.appendChild(optionsSpan);
 
+		const allLocationsCheckbox = document.getElementById("all_locations");
+
+		// RESET BUTTON
+
+		const resetAll = () => {
+			allLocationsCheckbox.checked = false;
+			toggleAll(allLocationsCheckbox);
+		};
+
+		const resetDiv = document.createElement("div");
+		resetDiv.className = "reset__btn";
+		resetDiv.innerHTML = `<span class="icon reset"></span><p>Clear choices</p>`;
+		resetDiv.addEventListener("click", resetAll);
+
+		this.appendChild(resetDiv);
+
 		const allLocationCheckboxes = document.querySelectorAll(
 			"input[type=checkbox]:not(#all_locations)"
 		);
@@ -102,7 +118,6 @@ export class ChooseLocationsModal extends HTMLElement {
 			});
 		};
 
-		const allLocationsCheckbox = document.getElementById("all_locations");
 		allLocationsCheckbox.onchange = () => toggleAll(allLocationsCheckbox);
 
 		for (let checkbox of allLocationCheckboxes) {

@@ -4,10 +4,18 @@
 	align-items: center;
 	row-gap: 2.4rem;
 	height: 100%;
-	border: 1px solid var(--blue500);
+	box-shadow: 0 0 5px -3px var(--blue500);
 	background: #ffffff8f;
 	border-radius: 0.4rem;
 	padding: 3.2rem;
+	margin: auto 3.2rem;
+	width: unset;
+	color: var(--blue500);
+
+	@media (min-width: $large) {
+		margin: auto;
+		width: 100%;
+	}
 
 	& .main-results__wrapper {
 		// background: white;
@@ -28,6 +36,11 @@
 	.loading__wrapper {
 		grid-column: 1;
 		grid-row: 1;
+	}
+
+	&__text {
+		font-size: 1.8rem;
+		color: var(--blue500);
 	}
 
 	.result {
@@ -75,9 +88,10 @@
 		row-gap: 1.6rem;
 		background: white;
 		padding: 2.4rem;
-		border: 1px solid #0000004a;
-		border-radius: 0.4rem;
+		// border: 1px solid #0000004a;
+		border-radius: 1.6rem;
 		height: fit-content;
+		box-shadow: 0 0 7px -3px var(--blue500);
 
 		& .subtext {
 			font-size: 1.4rem;
