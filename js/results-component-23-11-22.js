@@ -83,8 +83,21 @@ export class ResultsComponent extends HTMLElement {
 		const fetchData = async (url) => {
 			const response = await fetch(url, {
 				method: "GET",
-			}).then((resp) => resp.text());
-			return JSON.parse(response);
+			})
+				.then((resp) => {
+					if (resp.status >= 200 && resp.status <= 299) {
+						return resp.text();
+					} else {
+						throw Error(resp.status);
+					}
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+
+			if (response) {
+				return JSON.parse(response);
+			} else return null;
 		};
 
 		const requestAllSortedData = async () => {
@@ -98,29 +111,30 @@ export class ResultsComponent extends HTMLElement {
 
 					const locationName = location.split("_").join(" ");
 					const appointments = await fetchData(url);
+					if (appointments) {
+						appointments.forEach((appointment) => {
+							const dateString = new Date(appointment.date).toDateString();
+							const date = new Date(
+								appointment.date + " " + appointment.startTime
+							);
 
-					appointments.forEach((appointment) => {
-						const dateString = new Date(appointment.date).toDateString();
-						const date = new Date(
-							appointment.date + " " + appointment.startTime
-						);
+							allAppointments.push({
+								key: location,
+								location: locationName,
+								date: date,
+								dateString: dateString,
+								startTime: appointment.startTime,
+							});
 
-						allAppointments.push({
-							key: location,
-							location: locationName,
-							date: date,
-							dateString: dateString,
-							startTime: appointment.startTime,
+							allAppointmentsByLocation[location].push({
+								key: location,
+								location: locationName,
+								date: date,
+								dateString: dateString,
+								startTime: appointment.startTime,
+							});
 						});
-
-						allAppointmentsByLocation[location].push({
-							key: location,
-							location: locationName,
-							date: date,
-							dateString: dateString,
-							startTime: appointment.startTime,
-						});
-					});
+					}
 
 					allAppointmentsByLocation[location].sort(
 						(a, b) => Number(a.date) - Number(b.date)
@@ -129,7 +143,9 @@ export class ResultsComponent extends HTMLElement {
 
 			allAppointments.sort((a, b) => Number(a.date) - Number(b.date));
 			this.setLoading(false);
-			return [allAppointments, allAppointmentsByLocation];
+			if (allAppointments.length > 0) {
+				return [allAppointments, allAppointmentsByLocation];
+			} else return null;
 		};
 
 		return requestAllSortedData();
@@ -188,10 +204,17 @@ export class ResultsComponent extends HTMLElement {
 			}
 		}
 
-		const [allAppointments, allAppointmentsByLocation] =
-			await this.getAllAvailableAppointments();
-		// const [allAppointments, allAppointmentsByLocation] = allStubAppointments;
-		// this.setLoading(false); // comment out when using real data
+		const appointmentData = await this.getAllAvailableAppointments();
+
+		if (!appointmentData) {
+			this.innerHTML =
+				"<h1>Whoops, an error has occurred</h1><p>How embarrassing. We'll get to fixing it straight away. Please try again soon.</p>";
+			this.setLoading(false);
+
+			return;
+		}
+
+		const [allAppointments, allAppointmentsByLocation] = appointmentData;
 
 		if (allAppointments.length < 1) {
 			this.innerHTML = `No available appointments have been found at <strong><em>${chosenLocations}.</em></strong> for <strong>${
