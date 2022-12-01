@@ -45,8 +45,34 @@ export const reloadResultsElement = () => {
 };
 
 export const getBooleanFromString = (string) => {
-	console.log(string == "true");
 	if (string == "true") return true;
 	if (string == "false") return false;
 	return undefined;
+};
+
+export const throttleFunction = (callBack, delay = 1000) => {
+	let wait = false;
+	let waitingArgs = null;
+
+	const timeoutFunction = () => {
+		if (waitingArgs === null) {
+			wait = false;
+		} else {
+			callBack(...waitingArgs);
+			waitingArgs = null;
+			setTimeout(timeoutFunction, delay);
+		}
+	};
+
+	return (...args) => {
+		if (wait) {
+			waitingArgs = args;
+			return;
+		}
+
+		callBack(...args);
+		wait = true;
+
+		setTimeout(timeoutFunction, delay);
+	};
 };

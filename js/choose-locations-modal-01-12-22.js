@@ -2,7 +2,7 @@ import {
 	getSavedLocationsFromLocalStorage,
 	reloadResultsElement,
 	saveLocationsToLocalStorage,
-} from "./helpers.js";
+} from "./helpers-01-12-22.js";
 import { listLocations } from "./locations.js";
 
 export class ChooseLocationsModal extends HTMLElement {

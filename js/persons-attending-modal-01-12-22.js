@@ -2,7 +2,7 @@ import {
 	getSavedPersonsFromLocalStorage,
 	reloadResultsElement,
 	savePersonsToLocalStorage,
-} from "./helpers.js";
+} from "./helpers-01-12-22.js";
 
 export class PersonsAttentingModal extends HTMLElement {
 	constructor() {

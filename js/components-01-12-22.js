@@ -1,9 +1,9 @@
-import { ChooseLocationsModal } from "./choose-locations-modal-24-11-22.js";
+import { ChooseLocationsModal } from "./choose-locations-modal-01-12-22.js";
 import { Intro } from "./intro.js";
 import { ModalComponent } from "./modal-component.js";
-import { PersonsAttentingModal } from "./persons-attending-modal.js";
-import { ResultsComponent } from "./results-component-24-11-22.js";
-import { ScrollToTop } from "./scroll-to-top.js";
+import { PersonsAttentingModal } from "./persons-attending-modal-01-12-22.js";
+import { ResultsComponent } from "./results-component-01-12-22.js";
+import { ScrollToTop } from "./scroll-to-top-01-12-22.js";
 
 customElements.define("results-component", ResultsComponent);
 customElements.define("modal-component", ModalComponent);
