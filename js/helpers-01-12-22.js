@@ -65,6 +65,7 @@ export const throttleFunction = (callBack, delay = 1000) => {
 	};
 
 	return (...args) => {
+		console.log({ wait });
 		if (wait) {
 			waitingArgs = args;
 			return;

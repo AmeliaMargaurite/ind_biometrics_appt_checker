@@ -81,23 +81,20 @@ export class ResultsComponent extends HTMLElement {
 		};
 
 		const fetchData = async (url) => {
-			const response = await fetch(url, {
-				method: "GET",
-			})
-				.then((resp) => {
-					if (resp.status >= 200 && resp.status <= 299) {
-						return resp.text();
-					} else {
-						throw Error(resp.status);
-					}
-				})
-				.catch((error) => {
-					console.error(error);
+			let response;
+			try {
+				response = await fetch(url, {
+					method: "GET",
 				});
 
-			if (response) {
-				return JSON.parse(response);
-			} else return null;
+				if (response.status >= 200 && response.status <= 299) {
+					return response.json();
+				}
+			} catch (error) {
+				console.error(error);
+			}
+			const error = await response.json();
+			console.error(error);
 		};
 
 		const requestAllSortedData = async () => {
