@@ -55,13 +55,12 @@ posthog.init("phc_zDkzQ5TNwVlhTTCaE53xdl5IwdaiQgc3PWbTQY6xSFR", {
 	api_host: "https://eu.posthog.com",
 	loaded: (posthog) => {
 		posthog.identify(getUserId());
+		const toolbarJSON = new URLSearchParams(
+			window.location.hash.substring(1)
+		).get("__posthog");
+		if (toolbarJSON) {
+			posthog.loadToolbar(JSON.parse(toolbarJSON));
+		}
 	},
 	persistence: "memory",
 });
-
-const toolbarJSON = new URLSearchParams(window.location.hash.substring(1)).get(
-	"__posthog"
-);
-if (toolbarJSON) {
-	posthog.loadToolbar(JSON.parse(toolbarJSON));
-}
