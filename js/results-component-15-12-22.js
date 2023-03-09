@@ -93,7 +93,7 @@ export class ResultsComponent extends HTMLElement {
 			} catch (error) {
 				console.error(error);
 			}
-			const error = await response.json();
+			const error = await response;
 			console.error(error);
 		};
 
