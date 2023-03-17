@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=//home/amelkyau/ind-checker.ameliamargaurite.dev
+    - export DEPLOYPATH=/home/amelkyau/ind-checker.ameliamargaurite.dev
     - /bin/cp index.html $DEPLOYPATH
     - /bin/cp -R biometrics $DEPLOYPATH
     - /bin/cp -R css $DEPLOYPATH
