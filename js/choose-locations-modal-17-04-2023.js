@@ -3,7 +3,7 @@ import {
 	reloadResultsElement,
 	saveLocationsToLocalStorage,
 } from "./helpers-01-12-22.js";
-import { listLocations } from "./locations.js";
+import { listLocations } from "./locations-2.js";
 
 export class ChooseLocationsModal extends HTMLElement {
 	constructor() {

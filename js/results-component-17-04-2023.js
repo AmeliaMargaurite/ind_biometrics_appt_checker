@@ -4,7 +4,7 @@ import {
 	getSavedLocationsFromLocalStorage,
 	getSavedPersonsFromLocalStorage,
 } from "./helpers-01-12-22.js";
-import { listLocations } from "./locations.js";
+import { listLocations } from "./locations-2.js";
 import {
 	getAllUniqueDays,
 	getAppointmentsGroupedOrderedByQuantity,
